@@ -27,6 +27,7 @@
 - 标题使用 Arial Rounded MT Bold / 系统圆体 900，正文使用系统圆体 700–900，中文回退 PingFang SC / Noto Sans SC。
 - 标题 28–40 px，正文 16–19 px，HUD 13 px；数字使用 tabular-nums。
 - 英文不做松散字距，中文不做空心描边。
+- 上架海报使用独立的巡游告示牌构图：官方 UMe 票签位于左上，`PARADE` 为绿色圆体小标题，`PANIC!` 为红色超粗主标题，珍珠灯串作为收口；禁止复用普通居中两行标题模板。
 
 ## 5. Shape, material, and lighting
 
@@ -70,6 +71,7 @@
 - 禁止生成 Logo、错误字母、杯身标签和可读票据。
 - 禁止通用玻璃卡、霓虹辉光、emoji 图标和过重暗角。
 - 禁止让热点覆盖兔子脸或互相重叠。
+- 禁止海报标题直接浮在天空上、使用通用胶囊眉题，或遮挡兔子眼睛与完整表情。
 
 ## 11. Vertical-slice acceptance
 

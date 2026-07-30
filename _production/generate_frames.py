@@ -123,6 +123,19 @@ SCENES: dict[str, tuple[str | None, str, Path]] = {
         ,
         PUBLIC / "poster-art.png",
     ),
+    "poster_v2": (
+        "pink",
+        "Square 1:1 premium raster key art for a joyful family-friendly animated game poster. Preserve the supplied pink UMe rabbit exactly: "
+        "one long upright ear, one shorter rounded bent ear, blue bow, glossy black eyes with tiny lashes, rosy cheeks and short limbs. "
+        "Show the rabbit in a dynamic three-quarter pose on the lower-right half, leaning with both paws against a giant cream drinking straw as "
+        "a whimsical bubble-tea parade float starts moving. Pearl-shaped bulbs sweep in a strong arc from lower left to the rabbit, and a controlled "
+        "burst of red, green, gold and blue paper confetti creates motion behind the character. Sunny cream storefront street, bright blue sky, warm "
+        "upper-left sunlight, tactile soft molded-plastic character and painted-wood float, cinematic animated-film depth. Reserve the upper-left "
+        "quadrant as uncluttered pale sky with a soft cloud edge for release typography; do not place the rabbit's face, ears or essential props there. "
+        "The rabbit's face is large, unobstructed and delighted, with both eyes visible. Exactly one mascot, no people, no extra character, no words, "
+        "no logo, no letters, no pseudo-letters, no label, no watermark, no collage.",
+        PUBLIC / "poster-art-v2.png",
+    ),
 }
 
 
