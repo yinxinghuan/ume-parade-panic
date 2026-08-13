@@ -18,6 +18,7 @@
 - `src/Game/sounds.ts`：Web Audio 合成声效。
 - `src/Game/CompletionRanking.tsx/.less`：通关计时、时间成绩编码、冠军入口、完整榜单、资料跳转与通知。
 - `src/shared/runtime/`、`src/shared/leaderboard/useGameScore.ts`：平台桥接、排名读写和事件上报。
+- `worker/index.js`：自托管 frontend-only 健康检查，不持有排行榜或游戏数据库。
 - `src/game-id.ts`：永久游戏 UUID，由平台脚本从 `games.json` 注入。
 - `public/hero.png`：只包含粉色兔子的主场景首帧。
 - `public/frames/end_*.png`：五名成员支线尾帧、粉兔子高潮和奶茶内部结尾。
