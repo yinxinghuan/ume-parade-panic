@@ -8,6 +8,7 @@
 - HTML5 Video：播放 H.264/AAC、768 × 1024、约 5.04 秒的六段互动短片，使用 `playsInline` 兼容移动 WebView。
 - Web Audio API：首次交互后合成点击、支线完成、全员就位与高潮和弦。
 - Aigram 制作接口：图片经 transit 接口严格串行生成；视频经 2026-06-29 正式首尾帧接口按最多两任务、错峰 20 秒生成。
+- Aigram Runtime Rank API：通关上传时间成绩、读取 UUID 隔离排行榜并发送 `score_beat` 通知。
 
 ## 2. 目录结构
 
@@ -15,6 +16,8 @@
 - `src/Game/VideoQuest.less`：花车主题 UI、品牌吊牌、进度、热点、字幕、粒子和响应式规则。
 - `src/Game/i18n.ts`：中文与英文文案及语言检测。
 - `src/Game/sounds.ts`：Web Audio 合成声效。
+- `src/Game/CompletionRanking.tsx/.less`：通关计时、时间成绩编码、冠军入口、完整榜单、资料跳转与通知。
+- `src/shared/runtime/`、`src/shared/leaderboard/useGameScore.ts`：平台桥接、排名读写和事件上报。
 - `src/game-id.ts`：永久游戏 UUID，由平台脚本从 `games.json` 注入。
 - `public/hero.png`：只包含粉色兔子的主场景首帧。
 - `public/frames/end_*.png`：五名成员支线尾帧、粉兔子高潮和奶茶内部结尾。
@@ -34,6 +37,7 @@
 - 音频：单一 AudioContext 合成四组反馈；静音或音频失败不影响状态机。
 - 国际化：`localStorage.game_locale` 可覆盖 `zh/en`，否则跟随浏览器语言。
 - 外部扩展：`index.html` 仅一次加载远程 `guest-shell.js`；生产 CSS 不隐藏访客栏。
+- 通关排名：首次异常启动 `performance.now()` 计时，高潮视频结束停止；上传 `max(10, 10,000,000 - round(durationMs / 10))`，榜单还原显示为 `mm:ss.t`。所有通关成绩都达到平台可配置的 10 分领券门槛；成绩上传不预判登录，外部榜单入口显示 AlterU 下载 CTA。
 
 ## 4. 扩展点
 

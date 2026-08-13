@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { t } from './i18n';
 import { playAllReady, playComplete, playFinish, playTap } from './sounds';
+import { CompletionChampion, CompletionLeaderboard, formatCompletionTime, useCompletionRanking } from './CompletionRanking';
 import './VideoQuest.less';
 
 type ClipId = 'melon' | 'lemon' | 'guac' | 'mango' | 'pearl';
@@ -33,6 +34,8 @@ const VIDEO_FADE_MS = 450;
 const FALLBACK_DURATION_MS = 3200;
 const CLIMAX_SUBTITLE_DELAY_MS = 2800;
 const REVELATION_HOLD_MS = 2800;
+const GAME_NAME = 'UMe: Parade Panic';
+const POSTER_URL = 'https://yinxinghuan.github.io/games/posters/ume-parade-panic.png';
 const mediaUrl = (folder: 'videos' | 'frames', name: string) => `${import.meta.env.BASE_URL}${folder}/${name}`;
 
 function SoundIcon({ muted }: { muted: boolean }) {
@@ -52,6 +55,10 @@ export default function VideoQuest() {
   const [videoExiting, setVideoExiting] = useState(false);
   const [muted, setMuted] = useState(false);
   const [justCompleted, setJustCompleted] = useState<ClipId | null>(null);
+  const ranking = useCompletionRanking({
+    gameName: GAME_NAME, posterUrl: POSTER_URL,
+    copy: { title: t('rank.title'), leaders: t('rank.leaders'), me: t('rank.me'), empty: t('rank.empty'), loading: t('rank.loading'), openInAlterU: t('rank.openInAlterU'), getAlterU: t('rank.getAlterU'), close: t('rank.close') },
+  });
   const timers = useRef<number[]>([]);
 
   const clearTimers = useCallback(() => {
@@ -66,6 +73,7 @@ export default function VideoQuest() {
 
   const playClip = useCallback((clip: Clip) => {
     if (phase !== 'idle') return;
+    ranking.startRun();
     clearTimers();
     playTap(!muted);
     setCurrentClip(clip);
@@ -75,7 +83,7 @@ export default function VideoQuest() {
     setJustCompleted(null);
     setPhase('playing');
     later(() => setSubtitleVisible(true), SUBTITLE_DELAY_MS);
-  }, [clearTimers, later, muted, phase]);
+  }, [clearTimers, later, muted, phase, ranking.startRun]);
 
   const finishClip = useCallback(() => {
     if (!currentClip || phase === 'holding') return;
@@ -122,6 +130,7 @@ export default function VideoQuest() {
 
   const finishClimax = useCallback(() => {
     if (phase === 'revelation' || phase === 'done') return;
+    ranking.finishRun();
     setPhase('revelation');
     setSubtitleVisible(true);
     playFinish(!muted);
@@ -129,7 +138,7 @@ export default function VideoQuest() {
       setSubtitleVisible(false);
       setPhase('done');
     }, REVELATION_HOLD_MS);
-  }, [later, muted, phase]);
+  }, [later, muted, phase, ranking.finishRun]);
 
   const reset = useCallback(() => {
     clearTimers();
@@ -141,7 +150,8 @@ export default function VideoQuest() {
     setVideoFallback(false);
     setVideoExiting(false);
     setJustCompleted(null);
-  }, [clearTimers, muted]);
+    ranking.resetRun();
+  }, [clearTimers, muted, ranking.resetRun]);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
   useEffect(() => {
@@ -184,9 +194,9 @@ export default function VideoQuest() {
 
         <header className="uvq-brandbar">
           <div className="uvq-brandmark"><img src={`${import.meta.env.BASE_URL}brand/ume-logo.png`} alt="UMe California EST.2019" draggable={false} /></div>
-          <button type="button" className="uvq-iconbtn" onClick={() => setMuted((value) => !value)} aria-label={muted ? t('sound.off') : t('sound.on')}>
+          <div className="uvq-brandactions"><CompletionChampion ranking={ranking} /><button type="button" className="uvq-iconbtn" onClick={() => setMuted((value) => !value)} aria-label={muted ? t('sound.off') : t('sound.on')}>
             <SoundIcon muted={muted} />
-          </button>
+          </button></div>
         </header>
 
         {phase === 'idle' && seen.size === 0 && <div className="uvq-title"><span>{t('title.eyebrow')}</span><h1>{t('title.main')}</h1><p>{t('hint.first')}</p></div>}
@@ -216,12 +226,14 @@ export default function VideoQuest() {
         {phase === 'done' && <div className="uvq-result">
           <img className="uvq-result__bg" src={mediaUrl('frames', 'result_parade.png')} alt="" draggable={false} />
           <span>{t('done.eyebrow')}</span><h2>{t('done.title')}</h2><p>{t('done.body')}</p>
-          <button type="button" onPointerDown={reset} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); reset(); } }}>{t('done.again')}</button>
+          {ranking.completionMs != null && <div className="uvq-result__time"><span>{t('done.time')}</span><strong>{formatCompletionTime(ranking.completionMs)}</strong></div>}
+          <div className="uvq-result__actions"><button type="button" onPointerDown={reset} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); reset(); } }}>{t('done.again')}</button><button type="button" className="is-secondary" onPointerDown={ranking.openLeaderboard}>{t('rank.leaders')}</button></div>
         </div>}
 
         {phase !== 'done' && <footer className="uvq-progress" aria-label={progressLabel}><span>{progressLabel}</span><div>
           {CLIPS.map((clip, index) => <i key={clip.id} className={seen.has(clip.id) ? 'is-lit' : ''} style={{ '--dot-color': clip.dotColor } as React.CSSProperties}><b>{index + 1}</b></i>)}
         </div></footer>}
+        <CompletionLeaderboard ranking={ranking} />
       </section>
     </main>
   );

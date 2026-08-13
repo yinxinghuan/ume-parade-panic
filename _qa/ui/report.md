@@ -31,3 +31,10 @@
 - 视频：六个 SHA-256 均唯一，H.264 768 × 1024，约 5.04 秒。
 - 海报：`poster.png` 为 1024 × 1024 PNG；`poster-160.png` 中官方 Logo、`PARADE PANIC!`、兔子表情与彩纸动作均可辨认。
 - 评分：层级 5、连贯性 4、可读性 5、手感 4、资产质量 4、响应式 5、完成度 4；平均 4.43，无低于 3 的项目。
+
+## Completion ranking recheck — 2026-08-13
+
+- `completion-ranking/platform-layout-result-{390x844,320x568}.png`：结算用时、重玩和排行榜入口完整可见。
+- `completion-ranking/platform-layout-leaderboard-{390x844,320x568}.png`：榜单头像、名字、个人标记与时间列完整可见。
+- 两种尺寸均无页面溢出或运行错误；关闭按钮 44 × 44 px，榜单行高 58 px。
+- 模拟平台桥接验证成绩保存与榜单读取；所有通关成绩最低为 10 分，可供平台配置领券门槛。
